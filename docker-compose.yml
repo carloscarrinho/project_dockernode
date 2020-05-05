@@ -1,0 +1,28 @@
+version: '3.2'
+services:
+  mongo:
+    image: mongo
+    container_name: dockernodedb
+    restart: always
+    ports:
+      - "3333:27017"
+    networks:
+      - "dockernode-network"
+
+  dockernode:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: node:alpine
+    container_name: carloscarrinho_dockernode
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/var/www/
+    networks:
+      - dockernode-network
+    depends_on:
+      - mongo
+networks:
+  dockernode-network:
+    driver: bridge
